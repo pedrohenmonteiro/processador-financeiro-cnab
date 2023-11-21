@@ -34,7 +34,7 @@ public class BatchConfig {
     }
     
     @Bean
-    Step step(ItemReader reader, ItemProcessor processor, ItemWriter writer) {
+    Step step(ItemReader<TransacaoCNAB> reader, ItemProcessor processor, ItemWriter writer) {
         return new StepBuilder("step", jobRepository)
         .chunk(1000, transactionManager)
         .reader(reader)
