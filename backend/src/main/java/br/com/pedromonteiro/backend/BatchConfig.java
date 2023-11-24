@@ -2,6 +2,8 @@ package br.com.pedromonteiro.backend;
 
 import java.math.BigDecimal;
 
+import javax.sql.DataSource;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -11,6 +13,8 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.transform.Range;
@@ -78,4 +82,23 @@ public class BatchConfig {
             return transacao;
         };
     }
+
+    @Bean
+    JdbcBatchItemWriter<Transacao> writer(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Transacao>()
+            .dataSource(dataSource)
+            .sql(
+                """
+                    INSERT INTO transacao (
+                        tipo, data, valor, cpf, cartao,
+                        hora, dono_loja, nome_loja
+                    ) VALUES (
+                        :tipo, :data, :valor, :cpf, :cartao, :hora, :donoDaLoja, :nomeDaLoja
+                    )
+                        """
+            )
+            .beanMapped()
+            .build();
+    }
+        
 }   
