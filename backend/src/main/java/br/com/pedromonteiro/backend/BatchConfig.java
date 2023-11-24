@@ -57,7 +57,7 @@ public class BatchConfig {
     FlatFileItemReader<TransacaoCNAB> reader() {
         return new FlatFileItemReaderBuilder<TransacaoCNAB>()
         .name("reader")
-        .resource(new FileSystemResource("files/CNAB.txt"))
+        .resource(new FileSystemResource("backend/files/CNAB.txt"))
         .fixedLength()
         .columns(
             new Range(1,1), new Range(2, 9),
